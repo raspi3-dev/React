@@ -1,0 +1,39 @@
+body {
+  margin: 0;
+  font-family: 'Amatic SC', cursive;
+  font-family: 'Roboto Mono', monospace;
+  font-family: 'Rubik', sans-serif;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+.recuadro {
+  padding: 10px;
+  border: solid 0.1px rgb(173, 173, 173) ;
+  border-radius: 5px;
+  box-shadow: 7px 6px 7px -1px rgba(0,0,0,1);
+
+}
+h1{
+  font-style: italic;
+}
+
+span .error{
+  font-style: italic;
+}
+
+textarea{
+  height:100px;
+  resize:none;
+}
+
+.mr-3{
+  margin-right: 1rem!important;
+}
+
+.mt-10 {
+  margin-top: 15rem!important;
+}
+
