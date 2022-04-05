@@ -1,51 +1,54 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 import { useState } from 'react'
 
 
 import {db} from "../Common/firebase/firebase"
-import { collection, query,getDocs,addDoc, doc, deleteDoc, setDoc, onSnapshot } from "firebase/firestore";
-
-
-const Tickets = () => {
+import { collection,query,getDocs,addDoc, doc, deleteDoc, setDoc, onSnapshot} from "firebase/firestore";
+import { UserContext } from '../UserContext';
+  
+  const Tickets = () => {
 
  ////////////////////////-------ESTADOS------------/////////////////////////////////////////////////////  
 
-  const [stateCreatedBy, setCreatedBy] = useState("MadDog")
-  const [stateTitle, setTitle] = useState("")
-  const [stateDes, setDes] = useState("")
+  const [tickets, setTickets] = useState({})
+
+  const inputFocus = useRef()
+
+  let date = new Date().toDateString();
+  const [data, setData] = useState(date)
+  const [id, setId] = useState()
 
   const [stateUserList, setUserList] = useState([])
-  const [stateUser, setUser] = useState("")
-
   const [stateAssetList, setAssetList] = useState([])
-  const [stateAsset, setAsset] = useState("")
-
-  const [id, setId] = useState("")
-  const [stateEstat, setEstat] = useState("iniciat")
-
-  const [created, setCreated] = useState("")
-  const [updated, setUpdated] = useState("")
 
   const [incidenceList, setIncidenceList] = useState([])
   const [modModificar, setModModificar] = useState(false)
  
   const [error, setError] = useState(null)
+  ////////////////////////-------FUNCIÓN HANDLERINPUTCHANGE------------/////////////////////////////////////////////////////
+  const handlerInputChange = ({target}) =>{
+
+    setTickets({
+      ...tickets,
+      [target.name]:target.value
+    })
+  }
 
   ////////////////////////-------FIRESTORE DATABASE------------/////////////////////////////////////////////////////
-
   const taskCollectionRef = collection(db,"tasks")
+  
   const q = query(taskCollectionRef)
   
   ////////////////////////-------FIRESTORE llAMO A USERS------------/////////////////////////////////////////////////////
 
   const UsersCollectionRef = collection(db,"users")  
   
-  const getUsers = async () => {
+    const getUsers = async () => {
       
-    const dataUsers = await getDocs(UsersCollectionRef)
+      const dataUsers = await getDocs(UsersCollectionRef)
     
-    setUserList(dataUsers.docs.map( (v) =>{
-        return {...v.data(),id:id}
+      setUserList(dataUsers.docs.map( (v) =>{
+          return {...v.data()}
 
     }))
 
@@ -53,60 +56,65 @@ const Tickets = () => {
   ////////////////////////-------FIRESTORE llAMO A ASSETS------------/////////////////////////////////////////////////////
   const AssetesCollectionRef = collection(db,"assets")  
   
-  const getAssets= async () => {
+    const getAssets= async () => {
       
     const dataAssets = await getDocs(AssetesCollectionRef)
     
-    setAssetList(dataAssets.docs.map( (v) =>{
-        return {...v.data(),id:id}
+      setAssetList(dataAssets.docs.map( (v) =>{
+          return {...v.data()}
 
     }))
 
   }
   
-  useEffect(() => {    
-    
-    getAssets()
-    getUsers()
-    onSnapshot( q, (data)=>{
+  useEffect( () => {    
+  
+    const off = onSnapshot( q, (data)=>{
       
       setIncidenceList(data.docs.map( (v)=>{
         
         return ({...v.data(), id:v.id})
      
-      })
+      }),
+      getAssets(),
+      getUsers()
       )
     })
+    return () => {off()}
   }, [])
 
 ////////////////////////-------AÑADIR INCIDENCIA------------/////////////////////////////////////////////////////
 
   const addTask = (e) =>{
-    e.preventDefault()
-    setTitle("")
-    setDes("")
     
-    if(!stateTitle.trim() || !stateDes.trim()){
+    e.preventDefault()
+    
+    if(tickets['title'] === null || tickets['description'] == null){
       setError("Introdueix algun valor")
       return
     }
-
-    const data= new Date();
-    const dataText = data.toString();
+    else if(tickets['title'] != null || tickets['description'] != null)
+    {
+      let date = new Date().toDateString();
     
-    setCreated(dataText)
-    setUpdated(dataText)
+      setData(date)
+      
+      addDoc(collection(db, "tasks"), {
+        ...tickets,
+        createdBy:"MadDog",
+        created:data,
+        updated:data,
+        status:"iniciat"
+        
+      });
+    }
+    
+    setTickets({
+      title:"",
+      description:"",
+    })
 
-    addDoc(collection(db, "tasks"), {
-      createdBy:stateCreatedBy,
-      title:stateTitle,
-      description:stateDes,
-      asset:stateAsset,
-      created:created,
-      updated:updated,
-      asigned:stateUser,
-      status:stateEstat
-    });
+    inputFocus.current.focus()
 
     setError(null)
     
@@ -115,44 +123,43 @@ const Tickets = () => {
 ////////////////////////-------BORRAR INCIDENCIA------------/////////////////////////////////////////////////////
 
   const removeTask = (id) =>{
-    console.log(id)
+    
     deleteDoc(doc(db, "tasks", id))
+
   }
 
 ////////////////////////-------BOTON EDITAR INCIDENCIA------------/////////////////////////////////////////////////////
 
-  const editButon = (values) =>{
+  const editButon = ({id,title,description,asset,asigned}) =>{
+    console.log(id,title,description,asset,asigned)
+  
     setModModificar(true)
     
-    setTitle(values.title)
-    setDes(values.description)
-    setUser(values.asigned)
-    setAsset(values.asset)
-    setId(values.id)
-    setCreated(values.created)
-    setEstat("Actualitzat")
+    setId(id);
+
+    setTickets({
+      title,
+      description,
+      asigned,
+      asset
+    })
   }
 
 ////////////////////////-------EDITAR INCIDENCIA------------/////////////////////////////////////////////////////
 
   const addEdit = (e) =>{
     
-    const data2= new Date();
-    const dataText2 = data2.toString();
-    setUpdated(dataText2)
+    let date2 = new Date().toDateString();
 
     e.preventDefault()
-    
-    setDoc(doc(db,"tasks",id),
+    console.log(tickets)
+    setDoc (doc(db,"tasks",id),
     {
-      createdBy:stateCreatedBy,
-      title:stateTitle,
-      description:stateDes,
-      asset:stateAsset,
-      created:created,
-      updated:updated,
-      asigned:stateUser,
-      status:stateEstat
+      ...tickets,
+      createdBy:"MadDog",
+      created:data,
+      updated:date2,
+      status:"actualitzat"
     })
     
     setModModificar(false)
@@ -169,39 +176,50 @@ const Tickets = () => {
         <div className='col recuadro'>
           <h4 className="text-center">
           {
-            modModificar? "Editar Tasca" : "Afegir Tasca"
+            modModificar? "Editar Incidencias" : "Afegir Incidencia"
           }
           </h4>
           <form className="form-horizontal" onSubmit={modModificar? addEdit : addTask}>
             <div className="form-group container form-container">
               <label htmlFor="titulo">Tittle</label>
               <input
+                name="title"
+                ref = {inputFocus}
                 className='form-control mb-2'
-                onChange={e=>setTitle(e.target.value)}
+                onChange={handlerInputChange}
                 type="text"
                 placeholder='Afegir títol incidéncia'
-                value={stateTitle}/>
+                value={tickets.title}/>
               <label htmlFor="descripcion">Description</label>
               <input 
+                name="description"
                 className='form-control mb-2'
-                onChange={e=>setDes(e.target.value)}
+                onChange={handlerInputChange}
                 type="text"
                 placeholder='Afegir descripció incidéncia'
-                value={stateDes}/>
+                value={tickets.description}/>
               <label> Tècnic</label>
-              <select className="form-select" onChange={e=>setUser(e.target.value)}>
-                {
-                  stateUserList.map((element, index) => {
-                    return  <option key={index} value={element.name}>{element.name}</option>
-                  })
-      
-                }
+              <select 
+                name="asigned"
+                className="form-select" 
+                onChange={handlerInputChange}
+                value={tickets.asigned}>
+                  {
+                    stateUserList.map(({name}, index) => {
+                      return  <option key={index} value={name}>{name}</option>
+                    })
+        
+                  }
               </select>
               <label>Component Incidència</label>
-              <select  className="form-select mb-3" onChange={e=>setAsset(e.target.value)}>
+              <select  
+                name="asset"
+                className="form-select mb-3" 
+                onChange={handlerInputChange}
+                value={tickets.asset}>
                   {
-                    stateAssetList.map((element, index)=>{
-                      return <option key={index} value ={element.model}>{element.model}</option>
+                    stateAssetList.map(({model}, index)=>{
+                      return <option key={index} value ={model}>{model}</option>
                     })  
                   }
               </select>
