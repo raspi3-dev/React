@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react'
+import React, {useState,useEffect, useRef} from 'react'
 import dades from '../Common/bd.json'
 import Users from './Users'
 import {db} from '../Common/firebase/firebase'
@@ -15,6 +15,8 @@ const Messages = () => {
     const [id, setId] = useState("")
     const [error, setError] = useState(null)
     const [object, setObject] = useState({chat:chats[0].name,message:""})
+
+    const inputMessage = useRef()
 
     
     //referencia a la colecció (taula no sql) del firebase
@@ -98,6 +100,8 @@ const Messages = () => {
         })
 
         object.message=""
+
+        inputMessage.current.focus()
         
 
         setError(null)
@@ -139,6 +143,7 @@ const Messages = () => {
                             <textarea
                                 type="text" 
                                 name="message"
+                                ref = { inputMessage }
                                 className="form-control mb-2"
                                 placeholder="Ingrese Mensaje"
                                 onChange={ HandleChange }

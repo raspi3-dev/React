@@ -23,10 +23,10 @@ const Login = () => {
                         <label htmlFor="">User</label>
                     </div>
                     <div className="inputcaja">
-                        <input type="password" name="" required=""/>
+                        <input type="password" name="" required/>
                         <label htmlFor="">password</label>
                     </div>
-                    <input onClick={loginChange}type="submit" value="Entra"/>
+                    <input onClick={loginChange} type="submit" value="Entra"/>
                 </form>
             </div>
         </div>

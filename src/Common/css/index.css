@@ -90,7 +90,7 @@ textarea{
   font-size: 12px;
 }
 
-.box input[type="submit"] {
+.caja input[type="submit"] {
   background: transparent;
   border: none;
   outline: none;
