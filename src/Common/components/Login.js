@@ -7,11 +7,11 @@ const Login = () => {
 
     
     const [isRegistred, setRegistred] = useState(false)
+    
     const state2 = useContext(UserContext)
     const {user, setUser} = state2
     
     const [nom, setNom] = useState()
-    const [objetoUsu, setobjetoUsu] = useState({})
 
     
     const loginRegister = (e)=>{

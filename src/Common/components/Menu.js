@@ -16,7 +16,7 @@ const Menu = () => {
         <Link className="btn btn-info mr-3" to="/">Home</Link>
         <Link className="btn btn-info mr-3" to="/Tickets">Tickets</Link>
         <Link className="btn btn-info mr-3" to="/Messages">Mensajes</Link> 
-        <p className="">Loged Ass:<span>{user}</span></p>
+        <p className="">Loged As:<span>{user}</span></p>
         <hr></hr>
       </div>
     </div>
