@@ -11,7 +11,7 @@ import { UserContext } from './UserContext'
 
 const App = () => {
   
-  const state = useState("Usuari")
+  const state = useState(null)
   const [user, setUser] = state
   
   return ( 
@@ -19,9 +19,9 @@ const App = () => {
         <Menu />
         <Routes>
             <Route path="/Login" element={ <Login/> } />
-            <Route path="/Messages" element={ <Messages/> } />
-            <Route path="/Tickets" element={ <Tickets/> } />
-            <Route path="/" element={ <Home/> } />
+            <Route path="/Messages" element={ user?<Messages/>:<Login/> } />
+            <Route path="/Tickets" element={ user?<Tickets/>:<Login/> } />
+            <Route path="/" element={ user?<Home/>: <Login/>} />
             <Route path="*" element={ <NotFound/> } />
         </Routes>
       </UserContext.Provider>

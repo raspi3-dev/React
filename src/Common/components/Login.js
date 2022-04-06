@@ -1,32 +1,100 @@
 import React, { useContext, useState } from 'react'
 import { UserContext } from '../../UserContext'
+import { getAuth, createUserWithEmailAndPassword,signInWithEmailAndPassword, SignInMethod } from "firebase/auth";
+import { db } from '../firebase/firebase';
 
 const Login = () => {
 
+    
+    const [isRegistred, setRegistred] = useState(false)
     const state2 = useContext(UserContext)
     const {user, setUser} = state2
     
     const [nom, setNom] = useState()
+    const [objetoUsu, setobjetoUsu] = useState({})
 
-    const loginChange = (e)=>{
+    
+    const loginRegister = (e)=>{
         e.preventDefault()
-        setUser(nom)
+        setRegistred(!isRegistred)
     }
+
+    const crearUsu = (correo, pass)=>{
+        
+        const auth = getAuth();
+        createUserWithEmailAndPassword(auth,correo, pass)
+        .then((usuDesdeFirebase)=>{
+        console.log("usuario Creado",usuDesdeFirebase.user)
+        setUser(usuDesdeFirebase.user.email)
+        })
+    }
+
+    const iniciarSesion = (correo, pass)=>{
+            
+        const auth = getAuth();
+            signInWithEmailAndPassword(auth,correo, pass)
+            .then((usuDesdeFirebase)=>{
+            console.log("sesion iniciada con",usuDesdeFirebase.user)
+            setUser(usuDesdeFirebase.user.email)
+        })
+    }
+    
+    const submitHandler = (e) =>{
+        e.preventDefault()
+        
+        const correo = e.target.emailField.value
+        const pass = e.target.passwordField.value
+        
+        console.log(correo, pass)
+        
+        if(!isRegistred){
+            crearUsu(correo, pass)
+        }
+        else if(isRegistred){
+            iniciarSesion(correo, pass)
+        }
+        
+    }
+
+    
 
     return (
         <div className="col-6 m-auto mt-10">
             <div className="caja">
-                <h2>Login</h2>
-                <form action="">
+                <h2>{isRegistred
+                    ?"Login"
+                    :"Register"}
+                </h2>
+                <form onSubmit={submitHandler} action="">
                     <div className="inputcaja">
                         <input type="text" name="" required="" onChange={e=>setNom(e.target.value)}/>
                         <label htmlFor="">User</label>
                     </div>
                     <div className="inputcaja">
-                        <input type="password" name="" required=""/>
-                        <label htmlFor="">password</label>
+                        <input type="email" id="emailField" name="" required=""/>
+                        <label htmlFor="">Email</label>
                     </div>
-                    <input onClick={loginChange}type="submit" value="Entra"/>
+                    <div className="inputcaja">
+                        <input type="password" id="passwordField" name="" required=""/>
+                        <label htmlFor="">Password</label>
+                    </div>
+                    <button  
+                        className="btn-primary"
+                        
+                        type="submit">
+                            {isRegistred
+                                ?"Inicia sesión"
+                                :"Registro"
+                            }
+                    </button>
+                    <button  
+                        className="btn-primary"
+                        onClick={loginRegister}> 
+                        {isRegistred
+                            ?"No tienes cuenta? registrate"
+                            :"Ya tienes cuenta? Logeate"
+                        }
+                    </button>
                 </form>
             </div>
         </div>
