@@ -12,12 +12,21 @@ const Login = () => {
     const {user, setUser} = state2
     const [error, setError] = useState(null)
     
-    const [nom, setNom] = useState()
+    const [valorsInput, setValorsInput] = useState({})
 
     
+    const handlerInputChange = ({target}) =>{
+        setValorsInput({
+          ...valorsInput,
+          [target.name]:target.value
+        })
+      }
+      
     const loginRegister = (e)=>{
         e.preventDefault()
         setRegistred(!isRegistred)
+        setValorsInput({user:"",email:"",pass:""})
+
     }
 
     const crearUsu = (correo, pass)=>{
@@ -57,7 +66,6 @@ const Login = () => {
         const correo = e.target.emailField.value
         const pass = e.target.passwordField.value
         
-        console.log(correo, pass)
         
         if(!isRegistred){
             crearUsu(correo, pass)
@@ -79,15 +87,15 @@ const Login = () => {
                 </h2>
                 <form onSubmit={submitHandler} action="">
                     <div className="inputcaja">
-                        <input type="text" name="" required="" onChange={e=>setNom(e.target.value)}/>
+                        <input type="text" name="user" value={valorsInput.user} onChange={handlerInputChange}/>
                         <label htmlFor="">User</label>
                     </div>
                     <div className="inputcaja">
-                        <input type="email" id="emailField" name="" required=""/>
+                        <input type="email" id="emailField" name="email" value={valorsInput.email} onChange={handlerInputChange}/>
                         <label htmlFor="">Email</label>
                     </div>
                     <div className="inputcaja">
-                        <input type="password" id="passwordField" name="" required=""/>
+                        <input type="password" id="passwordField" name="pass" value={valorsInput.pass} onChange={handlerInputChange}/>
                         <label htmlFor="">Password</label>
                     </div>
                     <div className="d-flex flex-column">
