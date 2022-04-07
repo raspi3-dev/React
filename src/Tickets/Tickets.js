@@ -3,13 +3,16 @@ import { useState } from 'react'
 
 
 import {db} from "../Common/firebase/firebase"
-import { collection,query,getDocs,addDoc, doc, deleteDoc, setDoc, onSnapshot} from "firebase/firestore";
+import {where, collection,query,getDocs,addDoc, doc, deleteDoc, setDoc, onSnapshot} from "firebase/firestore";
 import { UserContext } from '../UserContext';
   
   const Tickets = () => {
 
  ////////////////////////-------ESTADOS------------/////////////////////////////////////////////////////  
-
+ const state2 = useContext(UserContext)
+ const {user, setUser} = state2
+ 
+ 
   const [tickets, setTickets] = useState({})
 
   const inputFocus = useRef()
@@ -37,11 +40,11 @@ import { UserContext } from '../UserContext';
   ////////////////////////-------FIRESTORE DATABASE------------/////////////////////////////////////////////////////
   const taskCollectionRef = collection(db,"tasks")
   
-  const q = query(taskCollectionRef)
+  const q = query(taskCollectionRef,where ('createdBy','==' , user))
   
   ////////////////////////-------FIRESTORE llAMO A USERS------------/////////////////////////////////////////////////////
 
-  const UsersCollectionRef = collection(db,"users")  
+  const UsersCollectionRef = collection(db,"tecnics")  
   
     const getUsers = async () => {
       
@@ -101,7 +104,7 @@ import { UserContext } from '../UserContext';
       
       addDoc(collection(db, "tasks"), {
         ...tickets,
-        createdBy:"MadDog",
+        createdBy:user,
         created:data,
         updated:data,
         status:"iniciat"
@@ -205,8 +208,8 @@ import { UserContext } from '../UserContext';
                 onChange={handlerInputChange}
                 value={tickets.asigned}>
                   {
-                    stateUserList.map(({name}, index) => {
-                      return  <option key={index} value={name}>{name}</option>
+                    stateUserList.map(({nom}, index) => {
+                      return  <option key={index} value={nom}>{nom}</option>
                     })
         
                   }

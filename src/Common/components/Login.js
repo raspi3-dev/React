@@ -10,6 +10,7 @@ const Login = () => {
     
     const state2 = useContext(UserContext)
     const {user, setUser} = state2
+    const [error, setError] = useState(null)
     
     const [nom, setNom] = useState()
 
@@ -22,10 +23,16 @@ const Login = () => {
     const crearUsu = (correo, pass)=>{
         
         const auth = getAuth();
+
         createUserWithEmailAndPassword(auth,correo, pass)
         .then((usuDesdeFirebase)=>{
-        console.log("usuario Creado",usuDesdeFirebase.user)
-        setUser(usuDesdeFirebase.user.email)
+            console.log("usuario Creado",usuDesdeFirebase.user)
+            setUser(usuDesdeFirebase.user)  
+        })
+        .catch((error) => {
+            const errorCode = error.code
+            const errorMessage = error.message
+            setError(`${error.message}`)
         })
     }
 
@@ -37,6 +44,11 @@ const Login = () => {
             console.log("sesion iniciada con",usuDesdeFirebase.user)
             setUser(usuDesdeFirebase.user.email)
         })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            setError(`${error.message}`)
+          });
     }
     
     const submitHandler = (e) =>{
@@ -57,10 +69,10 @@ const Login = () => {
     }
 
     
-
     return (
         <div className="col-6 m-auto mt-10">
             <div className="caja">
+                
                 <h2>{isRegistred
                     ?"Login"
                     :"Register"}
@@ -79,8 +91,7 @@ const Login = () => {
                         <label htmlFor="">Password</label>
                     </div>
                     <button  
-                        className="btn-primary"
-                        
+                        className="btn-primary m-1"
                         type="submit">
                             {isRegistred
                                 ?"Inicia sesión"
@@ -95,9 +106,12 @@ const Login = () => {
                             :"Ya tienes cuenta? Logeate"
                         }
                     </button>
+                    
                 </form>
+                <span className='text-danger'>{error}</span>
             </div>
         </div>
+        
     )
 }
 
