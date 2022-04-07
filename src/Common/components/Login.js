@@ -90,23 +90,24 @@ const Login = () => {
                         <input type="password" id="passwordField" name="" required=""/>
                         <label htmlFor="">Password</label>
                     </div>
-                    <button  
-                        className="btn-primary m-1"
-                        type="submit">
+                    <div className="d-flex flex-column">
+                        <button  
+                            className="btn btn-outline-primary btn-lg btn-bloc mb-2"
+                            type="submit">
+                                {isRegistred
+                                    ?"Inicia sesión"
+                                    :"Registro"
+                                }
+                        </button>
+                        <button  
+                            className="btn btn-outline-primary btn-lg btn-block"
+                            onClick={loginRegister}> 
                             {isRegistred
-                                ?"Inicia sesión"
-                                :"Registro"
+                                ?"No tienes cuenta? registrate"
+                                :"Ya tienes cuenta? Logeate"
                             }
-                    </button>
-                    <button  
-                        className="btn-primary"
-                        onClick={loginRegister}> 
-                        {isRegistred
-                            ?"No tienes cuenta? registrate"
-                            :"Ya tienes cuenta? Logeate"
-                        }
-                    </button>
-                    
+                        </button>
+                    </div>
                 </form>
                 <span className='text-danger'>{error}</span>
             </div>

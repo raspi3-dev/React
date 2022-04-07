@@ -42,7 +42,7 @@ textarea{
   top:50%;
   left:50%;
   transform: translate(-50%,-50%);
-  width:400px;
+  width:450px;
   padding: 40px;
   background: rgba(0,0,0,8);
   box-sizing: border-box;
@@ -90,14 +90,4 @@ textarea{
   font-size: 12px;
 }
 
-.box input[type="submit"] {
-  background: transparent;
-  border: none;
-  outline: none;
-  color: #fff;
-  background: #03a9f4;
-  padding: 10px 20px;
-  cursor: pointer;
-  border-radius: 50px;
-}
 
