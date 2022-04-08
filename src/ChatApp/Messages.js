@@ -1,14 +1,16 @@
-import React, {useState,useEffect, useRef} from 'react'
+import React, {useState,useEffect, useRef,useContext,} from 'react'
 import dades from '../Common/bd.json'
 import Users from './Users'
 import {db} from '../Common/firebase/firebase'
-import { addDoc, collection, deleteDoc,serverTimestamp, doc, setDoc, query, orderBy, onSnapshot} from "firebase/firestore";
-
+import { where,addDoc, collection, deleteDoc,serverTimestamp, doc, setDoc, query, onSnapshot} from "firebase/firestore";
+import { UserContext } from '../UserContext';
 
 
 const Messages = () => {
     const {chats} = dades
 
+    const state2 = useContext(UserContext)
+    const {user, setUser} = state2
 
     const [messages, setMessages] = useState([])
     const [edition, setEdition] = useState(false)
@@ -23,7 +25,8 @@ const Messages = () => {
     const messageCollectionRef=collection(db,"Mensajes")
 
 
-    const q=query(messageCollectionRef,orderBy('published','desc'))
+
+    const q = query(messageCollectionRef,where ('author_id','==', user))
 
 
     useEffect( () => {
@@ -58,7 +61,7 @@ const Messages = () => {
         setDoc(doc(db,"Mensajes",id),{
             "message":object.message,
             "chat_id":object.chat,
-            "author_id":1,
+            "author_id":user,
             "published":serverTimestamp()
         })
 
@@ -95,7 +98,7 @@ const Messages = () => {
         addDoc(messageCollectionRef,{
             "message":object.message,
             "chat_id":object.chat,
-            "author_id":1,
+            "author_id":user,
             "published":serverTimestamp()
         })
 
@@ -170,7 +173,7 @@ const Messages = () => {
                                         <tr key={key}>
                                             <td>{value.message}</td>
                                             <td>{value.chat_id}</td>
-                                            <Users id={value.author_id}/> 
+                                            <td>{user}</td>
                                             <td>
                                                 <button className="btn btn-sm btn-warning m-2" onClick={ () => edit(value) }>Editar</button>
                                                 <button className="btn btn-sm btn-danger" onClick={ () => deleteMessage(value.id) }>Esborrar</button>

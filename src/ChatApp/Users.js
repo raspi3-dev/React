@@ -5,13 +5,15 @@ const Users = ({id}) => {
   const {users}=dades;
 
 
-  const user=users.filter( (element) => {
+  const userName=users.filter( (element) => {
     return element.id === id
   })[0]
 
 
+  console.log(userName)
+  
   return (
-    <td>{user.username}</td>
+    <td>{userName.username}</td>
   )
 }
 
