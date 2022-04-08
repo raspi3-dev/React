@@ -23,9 +23,9 @@ const App = () => {
   
   return ( 
       <UserContext.Provider value={{user, setUser}}>
-        <Menu />
+        { user ? <Menu/> : <></>}
         <Routes>
-            <Route path="/Login" element={ user?<Home/>:<Login/> } />
+            <Route path="/Login" element={ user ? <Home/>:<Login/> } />
             <Route path="/Messages" element={ user?<Messages/>:<Login/> } />
             <Route path="/Tickets" element={ user?<Tickets/>:<Login/> } />
             <Route path="/" element={ user?<Home/>: <Login/>} />
