@@ -17,7 +17,7 @@ const App = () => {
   useEffect(()=>{
     const auth = getAuth();
     onAuthStateChanged(auth, (usuDesdeFirebase)=>{
-      setUser(usuDesdeFirebase.email)  
+      setUser(user)  
     })
   },[])
   

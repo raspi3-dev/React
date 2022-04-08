@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { UserContext } from '../../UserContext'
 import { getAuth, createUserWithEmailAndPassword,signInWithEmailAndPassword, SignInMethod } from "firebase/auth";
-import { db } from '../firebase/firebase';
 
 const Login = () => {
 
@@ -10,6 +9,7 @@ const Login = () => {
     
     const state2 = useContext(UserContext)
     const {user, setUser} = state2
+    
     const [error, setError] = useState(null)
     
     const [valorsInput, setValorsInput] = useState({})
@@ -35,8 +35,8 @@ const Login = () => {
 
         createUserWithEmailAndPassword(auth,correo, pass)
         .then((usuDesdeFirebase)=>{
-            console.log("usuario Creado",usuDesdeFirebase.user)
-            setUser(usuDesdeFirebase.user)  
+            console.log("usuario Creado",usuDesdeFirebase.user.email)
+            setUser(usuDesdeFirebase.user.email)  
         })
         .catch((error) => {
             const errorCode = error.code
