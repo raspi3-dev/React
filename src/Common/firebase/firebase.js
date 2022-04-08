@@ -10,7 +10,7 @@ import { getFirestore } from "firebase/firestore"
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyBbJ4s9FNMrpr3zg2-ks8Nj8XMH0w_DF6c",
   authDomain: "test1-b9306.firebaseapp.com",
   projectId: "test1-b9306",
