@@ -19,7 +19,7 @@ const Home = () => {
 
   return (
     <div className="col-6 m-auto mt-10 d-flex flex-column">
-      <h1 className="text-center">Bienvenido Sesión Iniciada</h1>
+      <h1 className="text-center"> Sesión Iniciada</h1>
       <button className="btn btn-outline-primary btn-lg btn-block w-50 m-auto mt-3" onClick={closeSesion}>
         Cerrar Sesión
       </button>

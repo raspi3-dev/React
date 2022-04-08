@@ -82,13 +82,13 @@ const Login = () => {
             <div className="caja">
                 
                 <h2>{isRegistred
-                    ?"Login"
-                    :"Register"}
+                    ?"Iniciar sesión"
+                    :"Registrarse"}
                 </h2>
                 <form onSubmit={submitHandler} action="">
                     <div className="inputcaja">
                         <input type="text" name="user" value={valorsInput.user} onChange={handlerInputChange}/>
-                        <label htmlFor="">User</label>
+                        <label htmlFor="">Usuario</label>
                     </div>
                     <div className="inputcaja">
                         <input type="email" id="emailField" name="email" value={valorsInput.email} onChange={handlerInputChange}/>
@@ -96,23 +96,23 @@ const Login = () => {
                     </div>
                     <div className="inputcaja">
                         <input type="password" id="passwordField" name="pass" value={valorsInput.pass} onChange={handlerInputChange}/>
-                        <label htmlFor="">Password</label>
+                        <label htmlFor="">Contraseña</label>
                     </div>
                     <div className="d-flex flex-column">
                         <button  
                             className="btn btn-outline-primary btn-lg btn-bloc mb-2"
                             type="submit">
                                 {isRegistred
-                                    ?"Inicia sesión"
-                                    :"Registro"
+                                    ?"Iniciar sesión"
+                                    :"Registrar"
                                 }
                         </button>
                         <button  
                             className="btn btn-outline-primary btn-lg btn-block"
                             onClick={loginRegister}> 
                             {isRegistred
-                                ?"No tienes cuenta? registrate"
-                                :"Ya tienes cuenta? Logeate"
+                                ?"¿No tienes cuenta? Registrate"
+                                :"¿Ya tienes cuenta? Inicia sesión"
                             }
                         </button>
                     </div>
