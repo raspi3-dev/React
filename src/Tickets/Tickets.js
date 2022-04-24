@@ -159,7 +159,7 @@ import { UserContext } from '../UserContext';
     setDoc (doc(db,"tasks",id),
     {
       ...tickets,
-      createdBy:"MadDog",
+      createdBy:user,
       created:data,
       updated:date2,
       status:"actualitzat"
